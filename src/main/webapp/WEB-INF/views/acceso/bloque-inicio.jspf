@@ -1,0 +1,22 @@
+<%@ page pageEncoding="UTF-8" %>
+<section class="panel-surface dashboard-block" aria-labelledby="resumen-${posBloque.index}">
+    <div class="panel-surface-heading dashboard-block-heading">
+        <span class="panel-mark">
+            <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#${bloque.icono()}" /></svg>
+        </span>
+        <div>
+            <h2 id="resumen-${posBloque.index}"><c:out value="${bloque.tabla().titulo()}" /></h2>
+            <p><c:out value="${bloque.descripcion()}" /></p>
+        </div>
+        <c:if test="${not empty bloque.ruta()}">
+            <c:url var="destinoBloque" value="${bloque.ruta()}" />
+            <a class="panel-edit dashboard-block-link" href="<c:out value='${destinoBloque}' />"
+               aria-label="Ver listado: <c:out value='${bloque.tabla().titulo()}' />">
+                Ver listado<svg class="panel-icon" aria-hidden="true"><use href="${iconos}#chevron" /></svg>
+            </a>
+        </c:if>
+    </div>
+    <c:set var="tabla" value="${bloque.tabla()}" />
+    <c:set var="textoVacio" value="${bloque.vacio()}" />
+    <%@ include file="../gestion/tabla-municipal.jspf" %>
+</section>

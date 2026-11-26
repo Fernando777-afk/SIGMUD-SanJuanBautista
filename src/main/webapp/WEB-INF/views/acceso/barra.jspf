@@ -1,0 +1,45 @@
+<%@ page pageEncoding="UTF-8" %>
+<a class="panel-skip" href="#contenido">Ir al contenido</a>
+<div class="panel-overlay" data-panel-overlay hidden></div>
+<aside class="panel-sidebar" id="menu-panel" aria-label="Menú de SIGMUD">
+    <div class="panel-brand-row">
+        <a class="panel-brand" href="<c:url value='/inicio' />">
+            <span class="panel-crest"><img src="<c:url value='/assets/img/escudo-san-juan-bautista.jpg' />"
+                      width="900" height="900" alt="Escudo municipal"></span>
+            <span><strong>SIGMUD</strong><small>Municipalidad Distrital de San Juan Bautista</small></span>
+        </a>
+        <button type="button" class="panel-icon-button panel-menu-close" data-menu-close aria-label="Cerrar menú" hidden>
+            <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#close" /></svg>
+        </button>
+    </div>
+    <nav class="panel-nav" aria-label="Navegación principal">
+        <p class="panel-nav-heading">General</p>
+        <a class="panel-nav-item" href="<c:url value='/inicio' />" ${pagina eq 'inicio' ? 'aria-current="page"' : ''}>
+            <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#home" /></svg>
+            <span>Vista general</span>
+        </a>
+        <c:forEach items="${modulos}" var="modulo">
+            <c:if test="${modulo.permitido(identidad)}">
+                    <c:if test="${grupoNav ne modulo.grupo()}">
+                        <c:set var="grupoNav" value="${modulo.grupo()}" />
+                        <p class="panel-nav-heading"><c:out value="${grupoNav}" /></p>
+                    </c:if>
+                    <a class="panel-nav-item" href="<c:url value='${modulo.ruta()}' />"
+                       ${moduloActual eq modulo or (modulo.name() eq 'SEGURIDAD' and (pagina eq 'cuenta' or pagina eq 'usuarios' or pagina eq 'permisos')) ? 'aria-current="location"' : ''}>
+                        <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#${modulo.icono()}" /></svg>
+                        <span><c:out value="${modulo.titulo()}" /></span>
+                    </a>
+            </c:if>
+        </c:forEach>
+    </nav>
+    <div class="panel-sidebar-footer">
+        <div class="panel-profile">
+            <span class="panel-avatar"><svg class="panel-icon" aria-hidden="true"><use href="${iconos}#user" /></svg></span>
+            <span><strong><c:out value="${identidad.nombreVisible()}" /></strong><small><c:out value="${identidad.rolVisible()}" /></small></span>
+        </div>
+        <form method="post" action="<c:url value='/salir' />">
+            <input type="hidden" name="csrf" value="<c:out value='${csrf}' />">
+            <button class="panel-logout" type="submit"><svg class="panel-icon" aria-hidden="true"><use href="${iconos}#logout" /></svg> Cerrar sesión</button>
+        </form>
+    </div>
+</aside>

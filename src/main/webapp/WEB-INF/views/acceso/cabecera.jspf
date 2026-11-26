@@ -1,0 +1,43 @@
+<%@ page pageEncoding="UTF-8" %>
+<header class="panel-topbar">
+    <div class="panel-topbar-title">
+        <button type="button" class="panel-icon-button panel-menu-open" data-menu-open aria-controls="menu-panel"
+                aria-expanded="false" aria-label="Abrir menú" hidden>
+            <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#menu" /></svg>
+        </button>
+        <nav class="panel-breadcrumb" aria-label="Ruta de navegación">
+            <c:choose>
+                <c:when test="${pagina eq 'inicio'}"><span aria-current="page">Vista general</span></c:when>
+                <c:otherwise>
+                    <a href="<c:url value='/inicio' />">Inicio</a>
+                    <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#chevron" /></svg>
+                    <c:choose>
+                        <c:when test="${pagina eq 'gestion'}"><span aria-current="page"><c:out value="${moduloActual.titulo()}" /></span></c:when>
+                        <c:when test="${pagina eq 'permisos'}">
+                            <a href="<c:url value='/usuarios' />">Usuarios</a>
+                            <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#chevron" /></svg>
+                            <span aria-current="page">Permisos</span>
+                        </c:when>
+                        <c:when test="${pagina eq 'cuenta'}">
+                            <a href="<c:url value='/usuarios' />">Usuarios</a>
+                            <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#chevron" /></svg>
+                            <span aria-current="page"><c:out value="${edicion ? 'Editar cuenta' : 'Nueva cuenta'}" /></span>
+                        </c:when>
+                        <c:otherwise><span aria-current="page">Usuarios</span></c:otherwise>
+                    </c:choose>
+                </c:otherwise>
+            </c:choose>
+        </nav>
+    </div>
+    <div class="panel-topbar-actions">
+        <c:if test="${pagina eq 'usuarios' and identidad.administraUsuarios()}">
+            <a class="button button-primary panel-create" href="<c:url value='/usuarios'><c:param name='nueva' value='1' /></c:url>">
+                <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#plus" /></svg> Nueva cuenta
+            </a>
+        </c:if>
+        <div class="panel-profile">
+            <span class="panel-avatar"><svg class="panel-icon" aria-hidden="true"><use href="${iconos}#user" /></svg></span>
+            <span><strong><c:out value="${identidad.nombreVisible()}" /></strong><small><c:out value="${identidad.rolVisible()}" /></small></span>
+        </div>
+    </div>
+</header>

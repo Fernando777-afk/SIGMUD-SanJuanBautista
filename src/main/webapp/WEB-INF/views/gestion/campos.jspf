@@ -1,0 +1,42 @@
+<%@ page pageEncoding="UTF-8" %>
+<c:forEach items="${formulario.campos()}" var="campo">
+    <c:choose>
+        <c:when test="${campo.tipo() eq 'hidden'}">
+            <input type="hidden" name="<c:out value='${campo.nombre()}' />" value="<c:out value='${campo.valor()}' />">
+        </c:when>
+        <c:otherwise>
+            <c:set var="campoId" value="${prefijo}-${campo.nombre()}" />
+            <div class="panel-campo ${campo.tipo() eq 'textarea' ? 'panel-campo-ancho' : ''}">
+                <label class="field-label" for="${campoId}"><c:out value="${campo.etiqueta()}" /></label>
+                <c:choose>
+                    <c:when test="${campo.tipo() eq 'select'}">
+                        <select class="form-select" id="${campoId}" name="<c:out value='${campo.nombre()}' />" ${campo.obligatorio() ? 'required' : ''}>
+                            <option value="">${campo.obligatorio() ? 'Seleccionar' : 'Cualquiera'}</option>
+                            <c:forEach items="${campo.opciones()}" var="opcion">
+                                <option value="<c:out value='${opcion.valor()}' />" ${campo.valor() eq opcion.valor() ? 'selected' : ''}><c:out value="${opcion.etiqueta()}" /></option>
+                            </c:forEach>
+                        </select>
+                    </c:when>
+                    <c:when test="${campo.tipo() eq 'textarea'}">
+                        <textarea class="form-control" rows="3" id="${campoId}" name="<c:out value='${campo.nombre()}' />"
+                                  maxlength="${campo.longitud()}" ${campo.obligatorio() ? 'required' : ''}><c:out value="${campo.valor()}" /></textarea>
+                    </c:when>
+                    <c:otherwise>
+                        <input class="form-control" id="${campoId}" type="${campo.tipo()}" name="<c:out value='${campo.nombre()}' />"
+                               value="<c:out value='${campo.valor()}' />" ${campo.obligatorio() ? 'required' : ''}
+                               ${campo.tipo() eq 'number' ? 'step="any"' : ''}
+                               <c:if test="${campo.longitud() gt 0}">maxlength="${campo.longitud()}"</c:if>
+                               <c:if test="${not empty campo.opciones()}">list="lista-${campoId}"</c:if>>
+                        <c:if test="${not empty campo.opciones()}">
+                            <datalist id="lista-${campoId}">
+                                <c:forEach items="${campo.opciones()}" var="opcion">
+                                    <option value="<c:out value='${opcion.valor()}' />"></option>
+                                </c:forEach>
+                            </datalist>
+                        </c:if>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </c:otherwise>
+    </c:choose>
+</c:forEach>

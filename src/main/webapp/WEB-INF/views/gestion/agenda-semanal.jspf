@@ -1,0 +1,26 @@
+<%@ page pageEncoding="UTF-8" %>
+<section class="panel-surface panel-semana" aria-labelledby="semana-titulo">
+    <div class="panel-semana-cabecera">
+        <h2 id="semana-titulo"><c:out value="${semanaAgenda.titulo()}" /></h2>
+        <nav aria-label="Cambiar semana">
+            <c:if test="${not empty semanaAgenda.anterior()}">
+                <c:url var="semanaAnterior" value="${semanaAgenda.anterior()}" />
+                <a class="button button-quiet" href="<c:out value='${semanaAnterior}' />">Semana anterior</a>
+            </c:if>
+            <c:if test="${not empty semanaAgenda.siguiente()}">
+                <c:url var="semanaSiguiente" value="${semanaAgenda.siguiente()}" />
+                <a class="button button-quiet" href="<c:out value='${semanaSiguiente}' />">Semana siguiente</a>
+            </c:if>
+        </nav>
+    </div>
+    <nav class="panel-semana-dias" aria-label="Filtrar por día">
+        <c:forEach items="${semanaAgenda.dias()}" var="diaAgenda">
+            <c:url var="destinoDia" value="${diaAgenda.destino()}" />
+            <a href="<c:out value='${destinoDia}' />" ${diaAgenda.seleccionado() ? 'aria-current="date"' : ''}>
+                <span><c:out value="${diaAgenda.etiqueta()}" /></span><strong><c:out value="${diaAgenda.numero()}" /></strong>
+            </a>
+        </c:forEach>
+    </nav>
+    <c:url var="semanaCompleta" value="${semanaAgenda.completa()}" />
+    <a class="panel-edit" href="<c:out value='${semanaCompleta}' />">Ver los siete días</a>
+</section>

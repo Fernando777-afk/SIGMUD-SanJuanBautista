@@ -1,0 +1,4 @@
+<%@ include file="estilos.jspf" %>
+<c:url var="iconos" value="/assets/img/iconos-panel.svg" />
+<link rel="stylesheet" href="<c:url value='/assets/css/panel.css?v=20261122-2' />">
+<script src="<c:url value='/assets/js/panel.js' />" defer></script>

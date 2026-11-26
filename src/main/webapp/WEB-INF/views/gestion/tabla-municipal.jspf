@@ -1,0 +1,47 @@
+<%@ page pageEncoding="UTF-8" %>
+<c:choose>
+    <c:when test="${empty tabla.filas()}">
+        <div class="panel-empty">
+            <span class="panel-mark"><svg class="panel-icon" aria-hidden="true"><use href="${iconos}#file" /></svg></span>
+            <p><c:out value="${empty textoVacio ? 'No hay registros para mostrar con esta selección.' : textoVacio}" /></p>
+        </div>
+    </c:when>
+    <c:otherwise>
+        <div class="panel-data-wrap">
+            <table class="account-table panel-data-table" role="table" aria-label="<c:out value='${tabla.titulo()}' />">
+                <thead role="rowgroup"><tr role="row">
+                    <c:forEach items="${tabla.columnas()}" var="columna"><th scope="col" role="columnheader"><c:out value="${columna}" /></th></c:forEach>
+                    <c:if test="${tabla.acciones()}"><th class="panel-row-action-head" scope="col" role="columnheader">Acciones</th></c:if>
+                </tr></thead>
+                <tbody role="rowgroup">
+                    <c:forEach items="${tabla.filas()}" var="fila">
+                        <tr role="row">
+                            <c:forEach items="${fila.celdas()}" var="celda" varStatus="col">
+                                <c:set var="columna" value="${tabla.columnas()[col.index]}" />
+                                <td role="cell" data-label="<c:out value='${columna}' />">
+                                    <c:choose>
+                                        <c:when test="${(columna eq 'Estado' or columna eq 'Estado actual' or columna eq 'Disponibilidad' or columna eq 'Prioridad') and celda ne '—'}">
+                                            <span class="status-chip ${celda eq 'Crítica' or celda eq 'Alta' or celda eq 'Bloqueada' or celda eq 'Ocupado' or celda eq 'Stock bajo' or celda eq 'Vencido' ? 'status-blocked' : celda eq 'Pendiente' or celda eq 'Recibido' or celda eq 'En atención' or celda eq 'Programada' or celda eq 'En trámite' or celda eq 'Por vencer' ? 'status-progress' : celda eq 'Activa' or celda eq 'Atendido' or celda eq 'Atendida' or celda eq 'Vigente' or celda eq 'Libre' or celda eq 'Disponible' ? 'status-ok' : ''}"><c:out value="${celda}" /></span>
+                                        </c:when>
+                                        <c:otherwise><span class="panel-cell-value"><c:out value="${celda}" /></span></c:otherwise>
+                                    </c:choose>
+                                </td>
+                            </c:forEach>
+                            <c:if test="${tabla.acciones()}">
+                                <td class="panel-row-action" role="cell">
+                                    <c:if test="${not empty fila.enlace()}">
+                                        <c:url var="destinoFila" value="${fila.enlace().destino()}" />
+                                        <a class="panel-edit" href="<c:out value='${destinoFila}' />">
+                                            <span><c:out value="${fila.enlace().texto()}" /></span>
+                                            <svg class="panel-icon" aria-hidden="true"><use href="${iconos}#chevron" /></svg>
+                                        </a>
+                                    </c:if>
+                                </td>
+                            </c:if>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </c:otherwise>
+</c:choose>
